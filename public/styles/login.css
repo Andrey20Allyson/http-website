@@ -1,0 +1,196 @@
+body{
+    background-image: linear-gradient(45deg, #1d1d1d, #0c0e23);
+    color: rgb(240, 241, 255);
+    text-shadow: 4px 4px 4px #000000;
+    border-color: #395143;
+
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: lighter;
+
+    min-height: 1000px;
+
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+a{
+    color: rgb(160, 158, 255);
+    margin-right: 10px;
+}
+
+header{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+
+    background-image: linear-gradient(180deg, #000000, #272727);
+
+    border-radius: 25px;
+    border-color: #43439a;
+    border-style: outset;
+    border-width: 0px;
+    border-bottom-width: 5px;
+    
+    box-shadow: 5px 5px 7px #00000075;
+}
+
+.outerDiv{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.leftDiv{
+    display: flex;
+    justify-content: left;
+
+    margin-right: 20px;
+
+    width: 40%;
+}
+
+.rightDiv{
+    display: flex;
+    justify-content: right;
+
+    margin-left: 20px;
+
+    width: 70%;
+}
+
+.bold{
+    color: #9a91ff;
+    font-size: 18px;
+}
+
+.centerDiv{
+    background-image: linear-gradient(180deg, #000000, #272727);
+    box-shadow: 5px 5px 7px #00000075;
+    width: 100%;
+
+    margin-top: 15px;
+
+    border-radius: 25px;
+    border-radius: 25px;
+    border-color: #e0e0ff;
+    border-style: outset;
+    border-width: 0px;
+    border-bottom-width: 2px;
+    border-right-width: 2px;
+
+    padding-top: 25px;
+    padding-bottom: 15px;
+}
+
+.inputDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    
+    margin: 5px;
+    height: auto;
+
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.inputText{
+    font-size: 22px;
+    margin: 2px;
+    margin-right: 5px;
+}
+
+.input{
+    width: 100%;
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.341);
+
+    margin-left: 5px;
+
+    text-indent: 15px;
+    font-size: 22px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: white;
+
+    border: 2px;
+    border-style: groove;
+    border-color: #9393ff;
+    border-radius: 40px;
+
+    outline-style: none;
+
+    background-color: #212121;
+}
+
+.errorOut{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-align: center;
+    font-style: oblique;
+    color: #fd5656;
+}
+
+.errorDiv{
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 2px;
+    margin-right: 50px;
+}
+
+.separator{
+    height: 20px;
+}
+
+#leftCenterDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: fit-content;
+}
+
+#desc{
+    font-size: 3vw;
+    text-align: center;
+    color: #47ffa9;
+    width: 70%;
+    
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+#descTitle{
+    font-size: 5vw;
+    font-style: italic;
+    text-align: center;
+    color: #00ff66;
+}
+
+#descLbl{
+    font-weight: bold;
+    font-size: calc(3.5vw + .5%);
+    color: #00ff66;
+}
+
+#logar{
+    width: 125px;
+    cursor: pointer;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    background-color: #3a3a3a;
+    color: #bfbfff;
+    text-indent: 0px;
+}
+
+#cadastroText{
+    font-size: 14px;
+    text-align: center;
+}
+
+#cadastro{
+    cursor: pointer;
+}

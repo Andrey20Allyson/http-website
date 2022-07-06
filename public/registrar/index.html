@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crie sua conta</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="../styles/registrar.css">
+</head>
+<body>
+    <header>
+        <h1>Crie sua conta já!</h1>
+    </header>
+    <div>
+        <div class="centerDiv">
+            <div class="inputDiv">
+                <p class="inputText">Nome</p>
+                <input id="nameIn" type="text" class="input">
+            </div>
+            <div class="errorDiv">
+                <div class="separator"></div>
+                <p class="errorOut"></p>
+            </div>
+            <div class="inputDiv">
+                <p class="inputText">Login</p>
+                <input id="loginIn" type="text" class="input">
+            </div>
+            <div class="errorDiv">
+                <div class="separator"></div>
+                <p class="errorOut"></p>
+            </div>
+            <div class="inputDiv">
+                <p class="inputText">Senha</p>
+                <input id="passIn" type="password" placeholder="com mais de 8 caracteres" class="input">
+            </div>
+            <div class="errorDiv">
+                <div class="separator"></div>
+                <p class="errorOut"></p>
+            </div>
+            <div class="inputDiv">
+                <p class="inputText">Confirme a senha</p>
+                <input id="confPassIn" type="password" class="input">
+            </div>
+            <div class="errorDiv">
+                <div class="separator"></div>
+                <p class="errorOut"></p>
+            </div>
+            <div class="inputDiv">
+                <p class="inputText">Data de Nascimento</p>
+                <input id="dateBornIn" type="date" class="input">
+            </div>
+            <div class="errorDiv">
+                <div class="separator"></div>
+                <p class="errorOut"></p>
+            </div>
+            <div class="inputDiv">
+                <p id="selectNaText" class="inputText">Nacionalidade</p>
+                <select id="selectNa"></select>
+            </div>
+            <div class="errorDiv">
+                <div class="separator"></div>
+                <p class="errorOut"></p>
+            </div>
+            <div class="inputDiv">
+                <p class="inputText">Sexo</p>
+                <p class="inputText">M</p>
+                <input id="maleBTN" type="button" class="inputCheck">
+                <p class="inputText">F</p>
+                <input id="femaleBTN" type="button" class="inputCheck">
+            </div>
+            <div class="separator"></div>
+            <div class="inputDiv">
+                <p class="inputText">concordo com os <a href="/">termos</a></p>
+                <input id="agreeWithTerms" type="checkbox" class="inputCheck">
+            </div>
+            <div class="inputDiv">
+                <input type="button" value="Cadastre-se" class="input" id="register">
+            </div>
+        </div>
+    </div>
+    <script type="module" src="../source/pages-script/registrar.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="../styles/login.css">
+</head>
+<body id="body">
+    <header>
+        <h1>Faça seu Login</h1>
+    </header>
+    <div class="outerDiv">
+        <div class="leftDiv">
+            <div class="centerDiv" id="leftCenterDiv">
+                <p id="desc"><label id="descTitle">Truittar</label> <br> conectando <br> você <br> com <br><label id="descLbl">o  mundo</label></p>
+            </div>
+        </div>
+        <div class="rightDir">
+            <div class="centerDiv" >
+                <div class="inputDiv">
+                    <p class="inputText">Login</p>
+                    <input class="input" id="login" type="text">
+                </div>
+
+                <div class="separator"></div>
+
+                <div class="inputDiv">
+                    <p class="inputText">Senha</p>
+                    <input class="input" type="password" id="password">
+                </div>
+
+                <div class="errorDiv">
+                    <div class="separator"></div>
+                    <p class="errorOut" id="loginError"></p>
+                </div>
+
+                <div class="inputDiv">
+                    <a href="">Esqueci minha senha</a>
+                    <input class="input" id="logar" type="button" value="Logar">
+                </div>
+
+            </div>
+
+            <div class="centerDiv">
+                <div class="inputDiv">
+                    <p class="inputText" id="cadastroText">Caso não tenha uma conta <br> <b class="bold" id="cadastro">clique aqui</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="../source/pages-script/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+codigos de requisições ao servidor
+
+0 - valor falso
+1 - valor verdade
+24 - não pode se conectar ao servidor
+25 - não pode se conectar ao banco de dados
