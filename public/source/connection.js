@@ -21,7 +21,7 @@
  * 'password': String;
  * 'nacionality': String;
  * 'gender': Gender;
- * 'born-date': String;
+ * 'bornDate': String;
  * }} User
  * 
  * @typedef {Array<[String, String]>} CountryList

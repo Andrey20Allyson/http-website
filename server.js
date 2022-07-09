@@ -69,15 +69,15 @@ sockets.on('connect', (socket) => {
     socket.on('do-register',
     /**
      * 
-     * @param {any} object 
+     * @param {any} user 
      * @param {Function} callback
      */
-    (object, callback) => {
+    (user, callback) => {
         var canInsert = true
         var cantInsertReason = {attribute: '', msg: ''}
 
         for(let [key, value] of Object.entries(minCharsIn)){
-            if(!object[key]){
+            if(!user[key]){
                 canInsert = false
                 cantInsertReason = {
                     attribute: key, 
@@ -85,7 +85,7 @@ sockets.on('connect', (socket) => {
                 }
                 break
             }
-            if(object[key] < value){
+            if(user[key] < value){
                 canInsert = false
                 cantInsertReason = {
                     attribute: key,
@@ -96,7 +96,7 @@ sockets.on('connect', (socket) => {
         }
 
         if(canInsert){
-            DBconn.insertInto('users', object,
+            DBconn.insertInto('users', user,
                 (qError, qResult, fields) => {
                     if (qError) {
                         callback(25, {})

@@ -83,7 +83,7 @@ requests.countriesNames((countries) => {
                     name: inputs.name.value,
                     login: inputs.login.value,
                     password: inputs.password.value,
-                    "born-date": inputs.bornDate.value,
+                    bornDate: inputs.bornDate.value,
                     nacionality: inputs.nacionality.value,
                     gender: 'M',
                 }, registerCB)
@@ -100,7 +100,7 @@ requests.countriesNames((countries) => {
                     name: inputs.name.value,
                     login: inputs.login.value,
                     password: inputs.password.value,
-                    "born-date": inputs.bornDate.value,
+                    bornDate: inputs.bornDate.value,
                     nacionality: inputs.nacionality.value,
                     gender: 'M',
                 }, registerCB)
