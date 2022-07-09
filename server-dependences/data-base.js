@@ -1,45 +1,57 @@
 import { createConnection } from 'mysql'
+import { colorFormat } from './terminal-colors.js'
 
 /**
- * @typedef {(qError: Error, qResult: Object[], fields: import('mysql').FieldInfo[]) => void} queryCallback
+ * @typedef {{qError: import('mysql').MysqlError, qResult: Object[], fields: import('mysql').FieldInfo[]}} QueryCBParams
  */
 
-const sqlFormater = {}
-
-/**
- * uses @[argIndex] to format
- * @param {String} text 
- * @param  {...any} args 
- * @returns {String}
- */
-sqlFormater.stringFormat = (text, ...args) => {
-    for(let i = 0; i < args.length; i++){
-        text = text.replace(`@${i}`, args[i]);
-    };
-    return text
-};
-
-/**
- * 
- * @param {String} tableName 
- * @param {any} object 
- * @returns {String}
- */
-sqlFormater.objectToInsert = (tableName, object) => {
-    var tableName = '`' + tableName + '`'
-
-    var columns = '('
-    var values = '('
-
-    for(let [key, value] of Object.entries(object)){
-        columns += '`' + key + '`,'
-        values += `"${value}",`
+class SqlDebuguer {
+    /**
+     * 
+     * @param {String} message 
+     */
+    static showSQLError(message) {
+        message = colorFormat('> [%s] %s', { text: 'SQL Error', color: [3, 41, 41] }, { text: message, color: [1, 31, 40] })
+        console.log(message);
     }
+}
 
-    columns = columns.slice(undefined, columns.length - 1) + ')'
-    values = values.slice(undefined, values.length - 1) + ')'
+class SqlFormater {
+    /**
+     * uses @[argIndex] to format
+     * @param {String} text 
+     * @param  {...any} args 
+     * @returns {String}
+     */
+    static stringFormat(text, ...args) {
+        for(let i = 0; i < args.length; i++){
+            text = text.replace(`@${i}`, args[i]);
+        };
+        return text
+    };
 
-    return `INSERT INTO ${tableName} ${columns} VALUES ${values};`
+    /**
+     * 
+     * @param {String} tableName 
+     * @param {any} object 
+     * @returns {String}
+     */
+    static objectToInsert(tableName, object) {
+        var tableName = `\`${tableName}\``
+
+        var columns = '('
+        var values = '('
+
+        for(let [key, value] of Object.entries(object)) {
+            columns += `\`${key}\`,`
+            values += `"${value}",`
+        }
+
+        columns = columns.slice(undefined, columns.length - 1) + ')'
+        values = values.slice(undefined, values.length - 1) + ')'
+
+        return `INSERT INTO ${tableName} ${columns} VALUES ${values};`
+    }
 }
 
 class DataBaseConnection {
@@ -55,26 +67,32 @@ class DataBaseConnection {
     /**
      * 
      * @param {import('mysql').Query} query 
-     * @param {queryCallback} callback 
+     * @returns {Promise<QueryCBParams>}
      */
-    connectQuery(query, callback) {
-        this.connection.connect((conError) => {
-                try {
-                    this.connection.query(query, callback);
-                } catch (exeption) {
-                    console.warn(exeption);
-                }
-            });
+    connectQuery(query) {
+        return new Promise((resolve, reject) => {
+            try{
+                this.connection.query(query, (qError, qResult, fields) => resolve({qError, qResult, fields}))
+            } catch (exeption) {
+                console.warn(exeption)
+                reject(exeption)
+            }
+        });
     }
 
     /**
      * 
      * @param {String} tableName 
-     * @param {any} object 
-     * @param {queryCallback} callback 
+     * @param {any} object
+     * @returns {Promise<QueryCBParams>}
      */
-    insertInto(tableName, object, callback) {
-        this.connectQuery(sqlFormater.objectToInsert(tableName, object), callback)
+    insertInto(tableName, object) {
+        return new Promise(
+            (resolve, reject) => {
+                this.connectQuery(SqlFormater.objectToInsert(tableName, object))
+                .then(resolve)
+            }
+        );
     }
 
     isInsertValid(tableName, object) {
@@ -82,4 +100,4 @@ class DataBaseConnection {
     }
 }
 
-export { DataBaseConnection, sqlFormater }
+export { DataBaseConnection, SqlFormater, SqlDebuguer }

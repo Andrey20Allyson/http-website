@@ -1,14 +1,12 @@
-const tcolor = {}
-
 /**
  * 
  * @param {String} text 
  * @param  {...any} optionalParams 
  * @returns formated text
  */
-tcolor.format = (text, ...optionalParams) => {
+function format(text, ...optionalParams) {
     var i = 0;
-    for(param of optionalParams){
+    for(let param of optionalParams){
         text = text.replace(`%${i}`, param);
         i++;
     };
@@ -22,24 +20,26 @@ tcolor.format = (text, ...optionalParams) => {
  * @param  {...any} optionalParams 
  * @returns colored text
  */
-tcolor.colorString = (colors, text) => {
+function colorString(colors, text) {
     var colorStr = '';
     for(let color of colors){
         colorStr += `\x1b[${color}m`;
     };
 
-    return `${colorStr}${text}\x1b[0m`;
+    return `${colorStr}${text}${colors.length > 0 ? '\x1b[0m': ''}`;
 };
 
 /**
  * 
- * @param {Number[]} colors 
  * @param {String} text 
- * @param  {...any} optionalParams 
+ * @param  {...{text: String; color?: Number[]}} optionalParams 
  * @returns colored & formated text
  */
-tcolor.colorFormat = (colors, text, ...optionalParams) => {
-    return tcolor.colorString(colors, tcolor.format(text, ...optionalParams))
+function colorFormat(text, ...optionalParams) {
+    for(let param of optionalParams) {
+        text = text.replace(`%s`, colorString(param.color, param.text))
+    }
+    return text
 }
 
 /**
@@ -48,7 +48,7 @@ tcolor.colorFormat = (colors, text, ...optionalParams) => {
  * @param {String} message 
  * @param  {...any} optionalParams 
  */
-tcolor.log = (colors, message, ...optionalParams) => {
+function colorLog(colors, message, ...optionalParams) {
     var finalMessage = message;
     for(let i = 0; i < optionalParams.length; i++){
         finalMessage = finalMessage.replace(`%${i}`, optionalParams[i]);
@@ -62,7 +62,7 @@ tcolor.log = (colors, message, ...optionalParams) => {
     console.log(`${colorStr}${finalMessage}\x1b[0m`);
 };
 
-tcolor.show = () => {
+function show() {
     for(let z = 40; z < 48; z++){
         var sep = ' ';
         for(let i = 0; i < 9; i++){
@@ -78,7 +78,7 @@ tcolor.show = () => {
         for(let y = 30; y < 38; y++){
             let text = '';
             for(let x = 0; x < 9; x++){
-                    text += ' | ' + tcolor.colorString([x, z, y], `[${x}, ${y}, ${z}]`);
+                    text += ' | ' + colorString([x, z, y], `[${x}, ${y}, ${z}]`);
             };
             console.log(text + ' |');
         };
@@ -88,7 +88,7 @@ tcolor.show = () => {
         for(let y = 40; y < 48; y++){
             let text = '';
             for(let x = 0; x < 9; x++){
-                    text += ' | ' + tcolor.colorString([x, z, y], `[${x}, ${y}, ${z}]`);
+                    text += ' | ' + colorString([x, z, y], `[${x}, ${y}, ${z}]`);
             };
             console.log(text + ' |');
         };
@@ -97,4 +97,5 @@ tcolor.show = () => {
     };
 };
 
-export { tcolor }
+
+export { colorFormat, colorLog, colorString, format, show }

@@ -1,3 +1,3 @@
-import { tcolor } from './terminal-colors.js'
+import { TerminalColor } from './terminal-colors.js'
 
-tcolor.show()
+TerminalColor.show()

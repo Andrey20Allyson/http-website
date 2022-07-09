@@ -1,7 +1,8 @@
 import { sockets } from "./server-dependences/http-server.js";
-import { tcolor } from './server-dependences/terminal-colors.js';
-import { DataBaseConnection, sqlFormater } from './server-dependences/data-base.js';
+import { colorString } from './server-dependences/terminal-colors.js';
+import { DataBaseConnection, SqlDebuguer, SqlFormater } from './server-dependences/data-base.js';
 import { getCountries } from './server-dependences/countries-names/countries-names.js';
+import { User } from './server-dependences/accounts/user.js';
 
 const DBconn = new DataBaseConnection({
     'host': '127.0.0.1',
@@ -12,28 +13,21 @@ const DBconn = new DataBaseConnection({
 });
 
 const show = {
-    'connection': true,
+    'connection': false,
     'req-ping': false,
-    'disconnection': true
+    'disconnection': false
 };
 
-const minCharsIn = {
-    'name': 5,
-    'login': 6,
-    'password': 8,
-    'born-date': 'XXXX-XX-XX'.length
-}
-
 sockets.on('connect', (socket) => {
-    show['connection'] ? console.log('> [%s] Socket with id %s has connected', tcolor.colorString([1, 33, 42], ' Connection '), socket.id) : null;
+    show['connection'] ? console.log('> [%s] Socket with id %s has connected', colorString([1, 33, 42], ' Connection '), socket.id) : null;
 
     socket.on('req-ping', (callback) => {
-        show['req-ping'] ? console.log('> [%s] Socket with id %s required his ping', tcolor.colorString([3, 30, 43], ' Request '), socket.id) : null;
+        show['req-ping'] ? console.log('> [%s] Socket with id %s required his ping', colorString([3, 30, 43], ' Request '), socket.id) : null;
         callback();
     });
 
     socket.on('disconnect', (reason) => {
-        show['disconnection'] ? console.log('> [%s] Socket with id %s disconnected because: %s', tcolor.colorString([1, 33, 41], ' Disconnection '), socket.id, reason) : null;
+        show['disconnection'] ? console.log('> [%s] Socket with id %s disconnected because: %s', colorString([1, 33, 41], ' Disconnection '), socket.id, reason) : null;
     });
 
     socket.on('get-countries-names',
@@ -41,9 +35,7 @@ sockets.on('connect', (socket) => {
      * 
      * @param {Function} callback 
      */
-    (callback) => {
-        getCountries('./server-dependences/countries-names/countries.json', callback)
-    })
+    (callback) => getCountries('./server-dependences/countries-names/countries.json', callback))
 
     socket.on('req-login-exists',
     /**
@@ -51,21 +43,18 @@ sockets.on('connect', (socket) => {
      * @param {String} login 
      * @param {Function} callback 
      */
-    (login, callback) => {
-        console.log(login);
-        console.log(sqlFormater.stringFormat("SELECT * FROM `users` WHERE `login` = '@0';", login))
-        DBconn.connectQuery(
-        sqlFormater.stringFormat("SELECT * FROM `users` WHERE `login` = '@0';", login),
-        (qError, qResult, fields) => {
+    (login, callback) => { 
+        DBconn.connectQuery(SqlFormater.stringFormat("SELECT * FROM `users` WHERE `login` = '@0';", login))
+        .then(({qError, qResult, fields}) => {
             if (qError) {
+                SqlDebuguer.showSQLError(qError.message);
                 callback(25);
-                console.log(qError);
             } else {
                 callback(qResult.length == 0 ? 0: 1);
             };
-        });
+        })
     });
-
+    
     socket.on('do-register',
     /**
      * 
@@ -73,39 +62,19 @@ sockets.on('connect', (socket) => {
      * @param {Function} callback
      */
     (user, callback) => {
-        var canInsert = true
-        var cantInsertReason = {attribute: '', msg: ''}
-
-        for(let [key, value] of Object.entries(minCharsIn)){
-            if(!user[key]){
-                canInsert = false
-                cantInsertReason = {
-                    attribute: key, 
-                    msg: 'não foi declarado'
+        const {can, reason} = new User(user).canRegister();
+        if(can) { 
+            DBconn.insertInto('users', user)
+            .then(({qError}) => {
+                if (qError) {
+                    SqlDebuguer.showSQLError(qError.message);
+                    callback(25);
+                } else {
+                    callback(1);
                 }
-                break
-            }
-            if(user[key] < value){
-                canInsert = false
-                cantInsertReason = {
-                    attribute: key,
-                    msg: `precisa ter ${value} caracteres ou mais`
-                }
-                break
-            }
-        }
-
-        if(canInsert){
-            DBconn.insertInto('users', user,
-                (qError, qResult, fields) => {
-                    if (qError) {
-                        callback(25, {})
-                    } else {
-                        callback(1, {})
-                    }
-                })
+            });
         } else {
-            callback(0, cantInsertReason)
+            callback(0, reason);
         }
     });
 
@@ -117,16 +86,14 @@ sockets.on('connect', (socket) => {
      * @param {Function} callback 
      */
     (login, password, callback) => {
-        DBconn.connectQuery(
-            sqlFormater.stringFormat("SELECT * FROM `users` WHERE `login` = '@0' AND `password` = '@1';", login, password),
-            (qError, qResult, fields) => {
-                if (qError) {
-                    callback(25)
-                } else {
-                    console.log(qResult)
-                    callback(qResult.length == 0 ? 0: 1)
-                }
+        DBconn.connectQuery(SqlFormater.stringFormat("SELECT * FROM `users` WHERE `login` = '@0' AND `password` = '@1';", login, password))
+        .then(({qError, qResult}) => {
+            if (qError) {
+                SqlDebuguer.showSQLError(qError.message);
+                callback(25);
+            } else {
+                callback(qResult.length == 0 ? 0: 1);
             }
-        );
+        });
     });
 });
