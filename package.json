@@ -1,7 +1,7 @@
 {
   "name": "http-website",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.4a",
+  "description": "Its a pesonal project to learn how to attach the client-side with server-side in a attempt to imitate the Twitter",
   "main": "index.js",
   "type": "module",
   "scripts": {
